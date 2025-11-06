@@ -1,0 +1,5 @@
+{
+  "name": "Custom Design Studio",
+  "description": "An interactive web application to customize t-shirts and caps. Upload your design, adjust its size and position on the product, get a real-time price estimate, and add it to your shopping cart.",
+  "requestFramePermissions": []
+}
