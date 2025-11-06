@@ -83,27 +83,46 @@ export const DesignCanvas = forwardRef<HTMLDivElement, DesignCanvasProps>(({ bas
   }, [interaction]);
 
   return (
-    <div ref={canvasRef} className="relative w-[560px] h-[560px] select-none bg-gray-200/50 rounded-lg">
-      <img src={baseImage} alt="Product Base" className="w-full h-full object-contain" />
-      {design && (
-        <div
-          id="design-controls"
-          className="absolute border-2 border-dashed border-indigo-500 cursor-move"
-          style={{
-            left: design.x,
-            top: design.y,
-            width: design.width,
-            height: design.height,
-          }}
-          onMouseDown={(e) => handleMouseDown(e, 'move')}
-        >
-          <img src={design.src} alt="User Design" className="w-full h-full" draggable="false" />
+    <div ref={canvasRef} className="relative w-[560px] h-[560px] select-none bg-gray-100 rounded-lg">
+      {/* Contenedor para la imagen base con posición relativa */}
+      <div className="relative w-full h-full">
+        <img 
+          src={baseImage} 
+          alt="Product Base" 
+          className="absolute top-0 left-0 w-full h-full object-contain" 
+        />
+        
+        {/* Capa de diseño superpuesta */}
+        {design && (
           <div
-            className="absolute -bottom-2 -right-2 w-4 h-4 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize"
-            onMouseDown={(e) => handleMouseDown(e, 'resize')}
-          />
-        </div>
-      )}
+            id="design-controls"
+            className="absolute border-2 border-dashed border-indigo-500 cursor-move overflow-hidden"
+            style={{
+              left: design.x,
+              top: design.y,
+              width: design.width,
+              height: design.height,
+              transform: 'translateZ(0)', // Mejora el rendimiento de la capa
+              pointerEvents: 'auto', // Asegura que los eventos del ratón funcionen
+            }}
+            onMouseDown={(e) => handleMouseDown(e, 'move')}
+          >
+            <img 
+              src={design.src} 
+              alt="User Design" 
+              className="w-full h-full object-contain pointer-events-none" 
+              style={{
+                mixBlendMode: 'multiply', // Mejora la integración con la prenda
+              }}
+              draggable="false" 
+            />
+            <div
+              className="absolute -bottom-2 -right-2 w-4 h-4 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize z-10"
+              onMouseDown={(e) => handleMouseDown(e, 'resize')}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 });
