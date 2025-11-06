@@ -40,25 +40,42 @@ export const DesignCanvas = forwardRef<HTMLDivElement, DesignCanvasProps>(({ bas
     let newDesign = { ...design };
 
     if (interaction === 'move') {
+      // Mover el diseño
       newDesign.x = interactionStartRef.current.designX + dx;
       newDesign.y = interactionStartRef.current.designY + dy;
     } else if (interaction === 'resize') {
-      const newWidth = Math.max(20, interactionStartRef.current.width + dx);
-      const aspectRatio = design.height / design.width;
-      newDesign.width = newWidth;
-      newDesign.height = newWidth * aspectRatio;
+      // Calcular el nuevo tamaño manteniendo la relación de aspecto
+      const aspectRatio = interactionStartRef.current.height / interactionStartRef.current.width;
+      
+      // Calcular el nuevo ancho basado en el movimiento del ratón
+      const newWidth = Math.max(40, interactionStartRef.current.width + dx);
+      const newHeight = newWidth * aspectRatio;
+      
+      // Asegurarse de que el diseño no sea más pequeño que el tamaño mínimo
+      const minSize = 40;
+      if (newWidth >= minSize && newHeight >= minSize) {
+        newDesign.width = newWidth;
+        newDesign.height = newHeight;
+        
+        // Ajustar la posición para que el redimensionamiento se haga desde la esquina inferior derecha
+        newDesign.x = interactionStartRef.current.designX;
+        newDesign.y = interactionStartRef.current.designY;
+      }
     }
 
-    // Enforce boundaries
+    // Aplicar límites de los bordes
     newDesign.x = Math.max(bounds.left, Math.min(newDesign.x, bounds.right - newDesign.width));
     newDesign.y = Math.max(bounds.top, Math.min(newDesign.y, bounds.bottom - newDesign.height));
-    if (newDesign.width > (bounds.right - bounds.left)) {
-        newDesign.width = bounds.right - bounds.left;
-        newDesign.height = newDesign.width * (design.height/design.width);
+    
+    // Asegurarse de que el diseño no se salga de los límites al redimensionar
+    if (newDesign.x + newDesign.width > bounds.right) {
+      newDesign.width = bounds.right - newDesign.x;
+      newDesign.height = newDesign.width * (design.height / design.width);
     }
-    if (newDesign.height > (bounds.bottom - bounds.top)) {
-        newDesign.height = bounds.bottom - bounds.top;
-        newDesign.width = newDesign.height * (design.width/design.height);
+    
+    if (newDesign.y + newDesign.height > bounds.bottom) {
+      newDesign.height = bounds.bottom - newDesign.y;
+      newDesign.width = newDesign.height * (design.width / design.height);
     }
 
 
@@ -83,7 +100,7 @@ export const DesignCanvas = forwardRef<HTMLDivElement, DesignCanvasProps>(({ bas
   }, [interaction]);
 
   return (
-    <div ref={canvasRef} className="relative w-[560px] h-[560px] select-none bg-gray-100 rounded-lg">
+    <div id="preview-container" ref={canvasRef} className="relative w-[560px] h-[560px] select-none bg-gray-100 rounded-lg">
       {/* Contenedor para la imagen base con posición relativa */}
       <div className="relative w-full h-full">
         <img 
@@ -117,9 +134,16 @@ export const DesignCanvas = forwardRef<HTMLDivElement, DesignCanvasProps>(({ bas
               draggable="false" 
             />
             <div
-              className="absolute -bottom-2 -right-2 w-4 h-4 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize z-10"
-              onMouseDown={(e) => handleMouseDown(e, 'resize')}
-            />
+              className="absolute -bottom-2 -right-2 w-6 h-6 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize z-10 flex items-center justify-center"
+              onMouseDown={(e) => {
+                e.stopPropagation();
+                handleMouseDown(e, 'resize');
+              }}
+            >
+              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M4 8h16M4 16h16" />
+              </svg>
+            </div>
           </div>
         )}
       </div>

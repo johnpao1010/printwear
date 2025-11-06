@@ -66,14 +66,61 @@ const App: React.FC = () => {
 
   const handleAddToCart = useCallback(async () => {
     if (!design || !canvasRef.current) return;
-    
+
     try {
-      const dataUrl = await toPng(canvasRef.current, { 
-        cacheBust: true,
-        // Exclude controls from the snapshot
-        filter: (node) => (node as HTMLElement).id !== 'design-controls'
+      // Crear un canvas para la captura
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Establecer el tamaño del canvas
+      canvas.width = 800;
+      canvas.height = 800;
+
+      // Cargar la imagen base
+      const baseImg = new Image();
+      baseImg.crossOrigin = 'Anonymous';
+
+      await new Promise<void>((resolve, reject) => {
+        baseImg.onload = () => resolve();
+        baseImg.onerror = reject;
+        baseImg.src = selectedVariant.imageUrl;
       });
-      
+
+      // Dibujar la imagen base
+      ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+      // Cargar el diseño
+      const designImg = new Image();
+      designImg.crossOrigin = 'Anonymous';
+
+      await new Promise<void>((resolve, reject) => {
+        designImg.onload = () => resolve();
+        designImg.onerror = reject;
+        designImg.src = design.src;
+      });
+
+      // Obtener el elemento de diseño para sus dimensiones y posición
+      const designElement = canvasRef.current.querySelector('#design-controls') as HTMLElement;
+      if (!designElement) return;
+
+      const rect = designElement.getBoundingClientRect();
+      const containerRect = canvasRef.current.getBoundingClientRect();
+
+      // Calcular la posición relativa dentro del contenedor
+      const x = (rect.left - containerRect.left) * (canvas.width / containerRect.width);
+      const y = (rect.top - containerRect.top) * (canvas.height / containerRect.height);
+      const width = rect.width * (canvas.width / containerRect.width);
+      const height = rect.height * (canvas.height / containerRect.height);
+
+      // Dibujar el diseño en la posición y tamaño correctos
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.drawImage(designImg, x, y, width, height);
+
+      // Obtener la URL de la imagen final
+      const dataUrl = canvas.toDataURL('image/png');
+
+      // Agregar el ítem al carrito
       const newItem: CartItem = {
         id: new Date().toISOString(),
         productVariant: selectedVariant,
@@ -81,11 +128,12 @@ const App: React.FC = () => {
         price: currentPrice,
         finalProductImage: dataUrl,
       };
+
       setCartItems(prevItems => [...prevItems, newItem]);
       setIsCartOpen(true);
     } catch (err) {
-      console.error('Failed to capture image', err);
-      alert('Could not add item to cart. Failed to capture the final product image.');
+      console.error('Error al capturar la imagen:', err);
+      alert('No se pudo agregar el artículo al carrito. Error al capturar la imagen del producto final.');
     }
   }, [design, selectedVariant, currentPrice]);
 

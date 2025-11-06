@@ -27,86 +27,70 @@ export const Controls: React.FC<ControlsProps> = ({ onUpload, design, price, onA
     fileInputRef.current?.click();
   };
 
-  const handlePreviewClick = () => {
+  const handlePreviewClick = async () => {
     if (!design) return;
     
-    // Crear un canvas temporal para combinar las imágenes
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d', { willReadFrequently: true });
-    if (!ctx) return;
-    
-    // Tamaño del canvas (puedes ajustar según necesites)
-    canvas.width = 800;
-    canvas.height = 800;
-    
-    // Cargar la imagen base
-    const baseImg = new Image();
-    baseImg.crossOrigin = 'Anonymous';
-    baseImg.onload = () => {
+    try {
+      // Obtener el contenedor del diseño
+      const previewContainer = document.querySelector('#preview-container');
+      if (!previewContainer) return;
+      
+      // Crear un canvas para la captura
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      
+      // Establecer el tamaño del canvas
+      canvas.width = 800;
+      canvas.height = 800;
+      
+      // Cargar la imagen base
+      const baseImg = new Image();
+      baseImg.crossOrigin = 'Anonymous';
+      
+      await new Promise<void>((resolve, reject) => {
+        baseImg.onload = () => resolve();
+        baseImg.onerror = reject;
+        baseImg.src = document.querySelector('img[alt="Product Base"]')?.getAttribute('src') || '';
+      });
+      
       // Dibujar la imagen base
       ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
       
       // Cargar el diseño
       const designImg = new Image();
       designImg.crossOrigin = 'Anonymous';
-      designImg.onload = () => {
-        // Calcular la posición y tamaño del diseño en el canvas
-        const scaleX = canvas.width / (design.width * 2);
-        const scaleY = canvas.height / (design.height * 2);
-        const scale = Math.min(scaleX, scaleY);
-        
-        const x = (canvas.width - design.width * scale) / 2;
-        const y = (canvas.height - design.height * scale) / 2;
-        
-        // Crear un canvas temporal para el diseño
-        const designCanvas = document.createElement('canvas');
-        const designCtx = designCanvas.getContext('2d', { willReadFrequently: true });
-        if (!designCtx) return;
-        
-        designCanvas.width = designImg.width;
-        designCanvas.height = designImg.height;
-        designCtx.drawImage(designImg, 0, 0);
-        
-        // Aplicar un filtro de brillo y contraste al diseño
-        const imageData = designCtx.getImageData(0, 0, designCanvas.width, designCanvas.height);
-        const data = imageData.data;
-        
-        // Ajustar brillo y contraste
-        for (let i = 0; i < data.length; i += 4) {
-          // Solo modificar píxeles no transparentes
-          if (data[i + 3] > 0) {
-            // Aumentar brillo (1.2 = +20% de brillo)
-            data[i] = Math.min(255, data[i] * 1.2);     // R
-            data[i + 1] = Math.min(255, data[i + 1] * 1.2); // G
-            data[i + 2] = Math.min(255, data[i + 2] * 1.2); // B
-            
-            // Mantener la transparencia original
-            data[i + 3] = data[i + 3];
-          }
-        }
-        
-        designCtx.putImageData(imageData, 0, 0);
-        
-        // Usar 'source-over' para mantener los colores originales
-        ctx.globalCompositeOperation = 'source-over';
-        
-        // Ajustar la opacidad (0.9 = 90% de opacidad)
-        ctx.globalAlpha = 1.0;
-        
-        // Dibujar el diseño con los ajustes
-        ctx.drawImage(
-          designCanvas,
-          0, 0, designCanvas.width, designCanvas.height,
-          x, y, design.width * scale, design.height * scale
-        );
-        
-        // Guardar la imagen combinada
-        setCombinedImage(canvas.toDataURL('image/png', 1.0));
-        setShowPreview(true);
-      };
-      designImg.src = design.src;
-    };
-    baseImg.src = document.querySelector('img[alt="Product Base"]')?.getAttribute('src') || '';
+      
+      await new Promise<void>((resolve, reject) => {
+        designImg.onload = () => resolve();
+        designImg.onerror = reject;
+        designImg.src = design.src;
+      });
+      
+      // Obtener el elemento de diseño para sus dimensiones y posición
+      const designElement = document.querySelector('#design-controls') as HTMLElement;
+      if (!designElement) return;
+      
+      const rect = designElement.getBoundingClientRect();
+      const containerRect = previewContainer.getBoundingClientRect();
+      
+      // Calcular la posición relativa dentro del contenedor
+      const x = (rect.left - containerRect.left) * (canvas.width / containerRect.width);
+      const y = (rect.top - containerRect.top) * (canvas.height / containerRect.height);
+      const width = rect.width * (canvas.width / containerRect.width);
+      const height = rect.height * (canvas.height / containerRect.height);
+      
+      // Dibujar el diseño en la posición y tamaño correctos
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.drawImage(designImg, x, y, width, height);
+      
+      // Guardar la imagen combinada
+      setCombinedImage(canvas.toDataURL('image/png', 1.0));
+      setShowPreview(true);
+      
+    } catch (error) {
+      console.error('Error al generar la vista previa:', error);
+    }
   };
 
   return (

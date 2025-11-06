@@ -8,7 +8,7 @@ export const PRODUCT_VARIANTS: Record<ProductType, ProductVariant[]> = {
       imageUrl: '/hoodie-black.png',
       thumbnailUrl: '/hoodie-black-thumb.png',
       basePrice: 45,
-      bounds: { top: 130, left: 170, right: 390, bottom: 380 },
+      bounds: { top: 100, left: 100, right: 460, bottom: 500 },
     },
     {
       id: 'hoodie-gray',
@@ -16,7 +16,7 @@ export const PRODUCT_VARIANTS: Record<ProductType, ProductVariant[]> = {
       imageUrl: '/hoodie-gray.png',
       thumbnailUrl: '/hoodie-gray-thumb.png',
       basePrice: 45,
-      bounds: { top: 130, left: 170, right: 390, bottom: 380 },
+      bounds: { top: 100, left: 100, right: 460, bottom: 500 },
     },
     {
       id: 'sweatshirt-black',
@@ -24,7 +24,7 @@ export const PRODUCT_VARIANTS: Record<ProductType, ProductVariant[]> = {
       imageUrl: '/sweatshirt-black.png',
       thumbnailUrl: '/sweatshirt-black-thumb.png',
       basePrice: 40,
-      bounds: { top: 130, left: 170, right: 390, bottom: 380 },
+      bounds: { top: 100, left: 100, right: 460, bottom: 500 },
     },
   ],
   cap: [
