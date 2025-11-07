@@ -1,6 +1,7 @@
 export type ProductType = 'tshirt' | 'cap';
 
 export interface Design {
+  id?: string;
   src: string;
   width: number;
   height: number;

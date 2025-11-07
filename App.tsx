@@ -8,12 +8,14 @@ import { DesignCanvas } from './components/DesignCanvas';
 import { Controls } from './components/Controls';
 import { ShoppingCart } from './components/ShoppingCart';
 import { CartContext } from './contexts/CartContext';
+import { ClipartSelector } from './components/ClipartSelector';
 import { toPng } from 'html-to-image';
 
 const App: React.FC = () => {
   const [productType, setProductType] = useState<ProductType>('tshirt');
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(PRODUCT_VARIANTS.tshirt[0]);
   const [design, setDesign] = useState<Design | null>(null);
+  const [selectedClipart, setSelectedClipart] = useState<Design | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -39,6 +41,7 @@ const App: React.FC = () => {
         const aspectRatio = img.height / img.width;
         const initialHeight = INITIAL_DESIGN_WIDTH * aspectRatio;
         const bounds = selectedVariant.bounds;
+        setSelectedClipart(null); // Resetear clipart seleccionado
         setDesign({
           src: e.target?.result as string,
           width: INITIAL_DESIGN_WIDTH,
@@ -50,6 +53,16 @@ const App: React.FC = () => {
       img.src = e.target?.result as string;
     };
     reader.readAsDataURL(file);
+  }, [selectedVariant]);
+
+  const handleClipartSelect = useCallback((clipart: Design) => {
+    setSelectedClipart(clipart);
+    setDesign({
+      ...clipart,
+      id: `clipart-${Date.now()}`,
+      x: selectedVariant.bounds.left + (selectedVariant.bounds.right - selectedVariant.bounds.left) / 2 - clipart.width / 2,
+      y: selectedVariant.bounds.top + (selectedVariant.bounds.bottom - selectedVariant.bounds.top) / 2 - clipart.height / 2,
+    });
   }, [selectedVariant]);
   
   const handleDesignChange = useCallback((newDesign: Design) => {
@@ -156,6 +169,7 @@ const App: React.FC = () => {
                 selectedVariant={selectedVariant} 
                 onSelect={handleVariantChange} 
               />
+              <ClipartSelector onSelectClipart={handleClipartSelect} />
               <Controls onUpload={handleDesignUpload} design={design} price={currentPrice} onAddToCart={handleAddToCart} />
             </div>
             <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg flex items-center justify-center">

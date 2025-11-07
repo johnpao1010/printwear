@@ -4,7 +4,7 @@ export const PRODUCT_VARIANTS: Record<ProductType, ProductVariant[]> = {
   tshirt: [
     {
       id: 'hoodie-black',
-      name: 'Hoodie Negro',
+      name: 'Buso Verde',
       imageUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/camisas/franellafosforecente.webp',
       thumbnailUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/camisas/franellafosforecente.webp',
       basePrice: 45,
@@ -12,7 +12,7 @@ export const PRODUCT_VARIANTS: Record<ProductType, ProductVariant[]> = {
     },
     {
       id: 'hoodie-gray',
-      name: 'Hoodie Gris',
+      name: 'Buzo Gris',
       imageUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/camisas/franelagris.webp',
       thumbnailUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/camisas/franelagris.webp',
       basePrice: 45,
@@ -20,7 +20,7 @@ export const PRODUCT_VARIANTS: Record<ProductType, ProductVariant[]> = {
     },
     {
       id: 'sweatshirt-black',
-      name: 'Buzo Negro',
+      name: 'Buzo Naranja',
       imageUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/camisas/franellamarilla.webp',
       thumbnailUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/camisas/franellamarilla.webp',
       basePrice: 40,
