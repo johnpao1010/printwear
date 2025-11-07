@@ -4,6 +4,7 @@ import { PRODUCT_VARIANTS, PRICE_PER_AREA_MULTIPLIER, INITIAL_DESIGN_WIDTH } fro
 import { Header } from './components/Header';
 import { ProductSelector } from './components/ProductSelector';
 import { ProductVariantSelector } from './components/ProductVariantSelector';
+import { AngleSelector } from './components/AngleSelector';
 import { DesignCanvas } from './components/DesignCanvas';
 import { Controls } from './components/Controls';
 import { ShoppingCart } from './components/ShoppingCart';
@@ -172,14 +173,33 @@ const App: React.FC = () => {
               <ClipartSelector onSelectClipart={handleClipartSelect} />
               <Controls onUpload={handleDesignUpload} design={design} price={currentPrice} onAddToCart={handleAddToCart} />
             </div>
-            <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg flex items-center justify-center">
-              <DesignCanvas 
-                ref={canvasRef}
-                baseImage={selectedVariant.imageUrl} 
-                design={design} 
-                onDesignChange={handleDesignChange}
-                bounds={selectedVariant.bounds}
-              />
+            <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg flex flex-col">
+              <div className="flex-1 flex items-center justify-center mb-6">
+                <DesignCanvas 
+                  ref={canvasRef}
+                  baseImage={selectedVariant.imageUrl} 
+                  design={design} 
+                  onDesignChange={handleDesignChange}
+                  bounds={selectedVariant.bounds}
+                />
+              </div>
+              {selectedVariant.angles && selectedVariant.angles.length > 0 && (
+                <div className="mt-4 border-t pt-4">
+                  <AngleSelector
+                    angles={selectedVariant.angles}
+                    selectedAngle={selectedVariant.defaultAngle || 'front'}
+                    onSelectAngle={(angle) => {
+                      const newVariant = {
+                        ...selectedVariant,
+                        imageUrl: angle.imageUrl,
+                        bounds: angle.bounds
+                      };
+                      setSelectedVariant(newVariant);
+                    }}
+                    variantName={selectedVariant.name}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </main>

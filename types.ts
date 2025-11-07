@@ -18,6 +18,13 @@ export interface DesignBounds {
 
 export type GenderCategory = 'hombre' | 'mujer' | 'juvenil' | 'niños';
 
+export interface ProductAngle {
+  view: 'front' | 'back' | 'left' | 'right';
+  imageUrl: string;
+  thumbnailUrl: string;
+  bounds: DesignBounds;
+}
+
 export interface ProductVariant {
   id: string;
   name: string;
@@ -26,6 +33,8 @@ export interface ProductVariant {
   basePrice: number;
   bounds: DesignBounds;
   gender: GenderCategory;
+  angles: ProductAngle[];
+  defaultAngle?: 'front' | 'back' | 'left' | 'right';
 }
 
 export interface CartItem {
