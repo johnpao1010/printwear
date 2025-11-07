@@ -16,6 +16,8 @@ export interface DesignBounds {
   bottom: number;
 }
 
+export type GenderCategory = 'hombre' | 'mujer' | 'juvenil' | 'niños';
+
 export interface ProductVariant {
   id: string;
   name: string;
@@ -23,6 +25,7 @@ export interface ProductVariant {
   thumbnailUrl: string;
   basePrice: number;
   bounds: DesignBounds;
+  gender: GenderCategory;
 }
 
 export interface CartItem {
