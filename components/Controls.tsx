@@ -119,9 +119,9 @@ export const Controls: React.FC<ControlsProps> = ({ onUpload, design, price, onA
       </div>
 
       <div className="border-t pt-6 space-y-4">
-        <h3 className="text-lg font-semibold text-gray-600">4. Finalize</h3>
+        <h3 className="text-lg font-semibold text-gray-600">4. Finalizar</h3>
         <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg">
-          <span className="font-semibold text-gray-600">Estimated Price:</span>
+          <span className="font-semibold text-gray-600">Precio Estimado:</span>
           <span className="text-2xl font-bold text-gray-800">${price.toFixed(2)}</span>
         </div>
         <button 
@@ -130,7 +130,7 @@ export const Controls: React.FC<ControlsProps> = ({ onUpload, design, price, onA
           className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-semibold text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed shadow"
         >
           <CartPlusIcon className="w-6 h-6"/>
-          <span>Add to Cart</span>
+          <span>Agregar al Carrito</span>
         </button>
       </div>
       

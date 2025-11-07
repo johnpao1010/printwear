@@ -11,7 +11,7 @@ interface ProductVariantSelectorProps {
 export const ProductVariantSelector: React.FC<ProductVariantSelectorProps> = ({ productType, variants, selectedVariant, onSelect }) => {
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-600 mb-3 capitalize">2. Choose a Style</h3>
+      <h3 className="text-lg font-semibold text-gray-600 mb-3 capitalize">2. Seleccione un Estilo</h3>
       <div className="grid grid-cols-3 gap-3">
         {variants.map(variant => (
           <button

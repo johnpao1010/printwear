@@ -14,19 +14,19 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({ selected, onSe
 
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-600 mb-3">1. Choose a Product</h3>
+      <h3 className="text-lg font-semibold text-gray-600 mb-3">1. Selecciona el Producto</h3>
       <div className="grid grid-cols-2 gap-4">
         <button
           onClick={() => onSelect('tshirt')}
           className={`${baseButtonClasses} ${selected === 'tshirt' ? selectedClasses : unselectedClasses}`}
         >
-          T-Shirt
+          Camisetas
         </button>
         <button
           onClick={() => onSelect('cap')}
           className={`${baseButtonClasses} ${selected === 'cap' ? selectedClasses : unselectedClasses}`}
         >
-          Cap
+          Gorras
         </button>
       </div>
     </div>

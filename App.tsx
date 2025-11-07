@@ -148,7 +148,7 @@ const App: React.FC = () => {
         <main className="flex-grow container mx-auto p-4 lg:p-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg flex flex-col space-y-6 h-fit">
-              <h2 className="text-2xl font-bold text-gray-700 border-b pb-3">Customize Your Gear</h2>
+              <h2 className="text-2xl font-bold text-gray-700 border-b pb-3">Personaliza tu Producto</h2>
               <ProductSelector selected={productType} onSelect={handleProductChange} />
               <ProductVariantSelector 
                 productType={productType}
