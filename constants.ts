@@ -511,8 +511,8 @@ export const PRODUCT_VARIANTS: Record<ProductType, ProductVariant[]> = {
     {
       id: 'cap-dad',
       name: 'Gorra Clásica',
-      imageUrl: 'https://printwear.vercel.app/cap-classic.png',
-      thumbnailUrl: 'https://printwear.vercel.app/cap-classic-thumb.png',
+      imageUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/gorras/gorra%20roja.webp',
+      thumbnailUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/gorras/gorra%20roja.webp',
       basePrice: 25,
       bounds: { top: 60, left: 200, right: 360, bottom: 180 },
       gender: 'hombre',
@@ -583,8 +583,8 @@ export const PRODUCT_VARIANTS: Record<ProductType, ProductVariant[]> = {
     {
       id: 'cap-beanie',
       name: 'Gorra Beanie',
-      imageUrl: 'https://printwear.vercel.app/cap-beanie.png',
-      thumbnailUrl: 'https://printwear.vercel.app/cap-beanie-thumb.png',
+      imageUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/gorras/gorra%20negra.jpg',
+      thumbnailUrl: 'https://eaa5q8xpiwhdnz0x.public.blob.vercel-storage.com/gorras/gorra%20negra.jpg',
       basePrice: 22,
       bounds: { top: 50, left: 180, right: 380, bottom: 160 },
       gender: 'niños',
